@@ -104,7 +104,7 @@ export function StudentPerformanceChart() {
               />
             }
           />
-          <Legend content={<ChartLegendContent />} />
+          <Legend content={(props) => <ChartLegendContent {...(props as any)} />} />
           <Line
             type="monotone"
             dataKey="math"
