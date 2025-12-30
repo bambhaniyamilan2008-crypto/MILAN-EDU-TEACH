@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Dhyan dein: 'output: export' yahan nahi hona chahiye
-  
+  // output: "export",  <-- Maine ye line hata di hai.
+
   images: {
     unoptimized: true,
   },
