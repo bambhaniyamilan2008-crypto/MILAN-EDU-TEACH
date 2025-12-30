@@ -1,34 +1,20 @@
-import type {NextConfig} from 'next';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  typescript: {
-    ignoreBuildErrors: true,
+  // output: "export",  <-- Humne isko comment kar diya taaki Server Actions chalein
+  
+  images: {
+    unoptimized: true, // Images ko bina error ke dikhane ke liye
   },
+  
+  /* Niche wali settings isliye hain taaki choti-moti 
+    coding galtiyon ki wajah se build fail na ho 
+  */
   eslint: {
     ignoreDuringBuilds: true,
   },
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'placehold.co',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'picsum.photos',
-        port: '',
-        pathname: '/**',
-      },
-    ],
+  typescript: {
+    ignoreBuildErrors: true,
   },
 };
 
