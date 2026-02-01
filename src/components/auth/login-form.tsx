@@ -1,4 +1,3 @@
-
 // @ts-nocheck
 "use client";
 
@@ -11,7 +10,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { type UserRole } from '@/lib/types';
-import { useAuth } from '@/firebase';
+// 👇 CHANGE 1: Import 'auth' directly, remove 'useAuth'
+import { auth } from '@/firebase'; 
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
 
 export function LoginForm() {
@@ -19,46 +19,62 @@ export function LoginForm() {
   const { toast } = useToast();
   const [role, setRole] = useState<UserRole>('student');
   const [loading, setLoading] = useState(false);
-  const auth = useAuth();
+
+  // 👇 CHANGE 2: Removed "const auth = useAuth();" 
+  // We now use the imported 'auth' object directly in the functions below.
 
   const handleEmailPasswordSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!auth) return;
+    
     setLoading(true);
 
     const formData = new FormData(event.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
 
+    console.log("📝 Form Data - Email:", email, "Password:", password);
+
     try {
-      // Try to create a new user first.
+      console.log("🚀 Step 1: Trying to Create New Account...");
+      // 👇 'auth' is now the imported instance from firebase.ts
       await createUserWithEmailAndPassword(auth, email, password);
+      
+      console.log("✅ Success: Account Created!");
       toast({
         title: "Account Created & Logged In",
         description: `Redirecting to ${role} dashboard...`,
       });
       router.push(`/${role}/dashboard`);
+
     } catch (error: any) {
+      console.log("⚠️ Step 1 Failed (Create User):", error.code);
+
       // If user already exists, sign them in.
       if (error.code === 'auth/email-already-in-use') {
+        console.log("🔄 User exists. Step 2: Trying to Login...");
+
         try {
           await signInWithEmailAndPassword(auth, email, password);
+          
+          console.log("✅ Success: Logged In!");
           toast({
             title: "Login Successful",
             description: `Redirecting to ${role} dashboard...`,
           });
           router.push(`/${role}/dashboard`);
+
         } catch (signInError: any) {
-          console.error("Firebase Sign-In Error:", signInError);
+          console.error("❌ Login Failed Error:", signInError.code, signInError.message);
+          
           toast({
             variant: "destructive",
             title: "Login Failed",
-            description: signInError.message || "An unexpected error occurred during sign-in.",
+            description: "Incorrect Password or Account Issue. Check Console.",
           });
         }
       } else {
         // Handle other errors during creation
-        console.error("Firebase Auth Error:", error);
+        console.error("❌ Firebase Auth Error:", error);
         toast({
           variant: "destructive",
           title: "Authentication Failed",
@@ -71,7 +87,6 @@ export function LoginForm() {
   };
 
   const handleGoogleSignIn = async () => {
-    if (!auth) return;
     setLoading(true);
     const provider = new GoogleAuthProvider();
     try {
