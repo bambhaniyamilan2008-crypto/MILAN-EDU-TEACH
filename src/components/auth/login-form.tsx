@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { type UserRole } from '@/lib/types';
 // 👇 CHANGE 1: Import 'auth' directly, remove 'useAuth'
-import { auth } from './firebase'; 
+import { auth } from '@/firebase/config';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword } from 'firebase/auth';
 
 export function LoginForm() {
