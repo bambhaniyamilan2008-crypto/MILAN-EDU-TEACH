@@ -1,7 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-// 1. YOUR CONFIGURATION
 const firebaseConfig = {
   projectId: "studio-8186080283-f4574",
   appId: "1:31466290334:web:027b890f614e7aceb68f8f",
@@ -11,12 +10,11 @@ const firebaseConfig = {
   messagingSenderId: "31466290334"
 };
 
-// 2. INITIALIZE FIREBASE
-// We use this check to prevent "App already initialized" errors in Next.js
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+// 👇 DEBUG LOGS: Check your terminal/browser console for this
+console.log("🔥 Config Object:", firebaseConfig); 
+console.log("🔥 Project ID:", firebaseConfig?.projectId);
 
-// 3. INITIALIZE AUTH
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
-// 4. EXPORT FOR USE IN LOGIN FORM
 export { app, auth };
